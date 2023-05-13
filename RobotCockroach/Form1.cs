@@ -14,6 +14,7 @@ namespace RobotCockroach
     
     public partial class MainForm : Form
     {
+        Random random = new Random();
         int AlgStep = 0;
         List<Cockroach> workCockroachs;//рабочий Таракан - активный Таракан, который будет выполнять алгоритм
         List<PictureBox> workpbs;//рабочее поле PictureBox - поле на котрой будет рабочий Таракан
@@ -33,9 +34,12 @@ namespace RobotCockroach
 
         private void NebBtn_Click(object sender, EventArgs e)
         {
-            Cockroach cockroach = new Cockroach(new Bitmap(@"\\lib16\Students\ФИб-2\ООП\Ощепков Дмитрий\RobotCockroachGUI\RobotCockroach\cockroach1.png"));//
+            Cockroach cockroach = new Cockroach(new Bitmap(@"D:\Лабораторки\ООП\OOP_Lab5\RobotCockroach\cockroach1.png"));//
             PictureBox p = new PictureBox();
-              
+            foreach (var workpb in workpbs)
+                workpb.BorderStyle = BorderStyle.None;
+            p.BorderStyle = BorderStyle.FixedSingle;
+
             p.MouseMove += new MouseEventHandler(IMouseMove);
             p.MouseDown += new MouseEventHandler(IMouseDown);
             PB.Add(p);
@@ -57,8 +61,10 @@ namespace RobotCockroach
         private void Show(Cockroach cockroach, Panel owner, PictureBox p)
         {
 
-            cockroach.X = (owner.Width - cockroach.Image.Width) / 2;
-            cockroach.Y = (owner.Height - cockroach.Image.Height) / 2;
+            cockroach.X = (owner.Width - cockroach.Image.Width) / 2 +
+                    random.Next(-(owner.Width - cockroach.Image.Width)/2, (owner.Width - cockroach.Image.Width) / 2);
+            cockroach.Y = (owner.Height - cockroach.Image.Height) / 2 +
+                    random.Next(-(owner.Width - cockroach.Image.Width) / 2, (owner.Width - cockroach.Image.Width) / 2);
             RePaint(cockroach, p);
             owner.Controls.Add(p);// добавляем PictureBox к элементу Panel
 
@@ -217,12 +223,12 @@ namespace RobotCockroach
 
         private void ButtonDeleteHero_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < workpbs.Count; i++)
+            while (workpbs.Count != 0)
             {
-                int k = PB.IndexOf(workpbs[i] as PictureBox);
-                workCockroachs.RemoveAt(i);
-                workpbs[i].Dispose();
-                workpbs.RemoveAt(i);
+                int k = PB.IndexOf(workpbs[0] as PictureBox);
+                workCockroachs.RemoveAt(0);
+                workpbs[0].Dispose();
+                workpbs.RemoveAt(0);
                 LC.RemoveAt(k);
                 PB[k].Dispose();
                 PB.RemoveAt(k);
