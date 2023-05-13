@@ -15,8 +15,8 @@ namespace RobotCockroach
     public partial class MainForm : Form
     {
         int AlgStep = 0;
-        Cockroach workCockroach;//рабочий Таракан - активный Таракан, который будет выполнять алгоритм
-        PictureBox workpb;//рабочее поле PictureBox - поле на котрой будет рабочий Таракан
+        List<Cockroach> workCockroachs;//рабочий Таракан - активный Таракан, который будет выполнять алгоритм
+        List<PictureBox> workpbs;//рабочее поле PictureBox - поле на котрой будет рабочий Таракан
         List<Cockroach> LC;//Список для хранения созданных Тараканов
         List<PictureBox> PB;//Список для хранения созданных объектов PictureBox
 
@@ -25,20 +25,26 @@ namespace RobotCockroach
             LC = new List<Cockroach>();
             PB = new List<PictureBox>();
 
+            workCockroachs = new List<Cockroach>();
+            workpbs = new List<PictureBox>();
+
             InitializeComponent();
         }
 
         private void NebBtn_Click(object sender, EventArgs e)
         {
-            Cockroach cockroach = new Cockroach(new Bitmap(@"\\lib16\Students\ФИб-2\ЧМ\Ощепков\RobotCockroachGUI\RobotCockroach\bin\Debug\cockroach1.png"));//
+            Cockroach cockroach = new Cockroach(new Bitmap(@"\\lib16\Students\ФИб-2\ООП\Ощепков Дмитрий\RobotCockroachGUI\RobotCockroach\cockroach1.png"));//
             PictureBox p = new PictureBox();
-            RePaint(workCockroach, p);           
+              
             p.MouseMove += new MouseEventHandler(IMouseMove);
             p.MouseDown += new MouseEventHandler(IMouseDown);
             PB.Add(p);
             LC.Add(cockroach);
-            workCockroach = cockroach;
-            workpb = p;
+            workCockroachs.Add(cockroach);
+            workpbs.Add(p);
+
+            Show(cockroach, Field, p);
+
         }
 
         //Изображение объекта Таракан в PictureBox используется при изменении направления Таракана
@@ -50,10 +56,12 @@ namespace RobotCockroach
 
         private void Show(Cockroach cockroach, Panel owner, PictureBox p)
         {
+
             cockroach.X = (owner.Width - cockroach.Image.Width) / 2;
             cockroach.Y = (owner.Height - cockroach.Image.Height) / 2;
             RePaint(cockroach, p);
             owner.Controls.Add(p);// добавляем PictureBox к элементу Panel
+
         }
 
         private void IMouseDown(object sender, MouseEventArgs e)
@@ -61,8 +69,22 @@ namespace RobotCockroach
             if (e.Button == MouseButtons.Left)
             {
                 int k = PB.IndexOf(sender as PictureBox);//запоминаем номер нажатого компонента PictureBox
-                workpb = sender as PictureBox;//объявляет его рабочим
-                workCockroach = LC[k];//по найденному номеру находим Таракана в списке
+                if (Control.ModifierKeys != Keys.Control)
+                {
+                    foreach (var workpb in workpbs)
+                        workpb.BorderStyle = BorderStyle.None;
+
+                    workCockroachs.Clear();
+                    workpbs.Clear();
+                }
+                var p = sender as PictureBox;
+                p.BorderStyle = BorderStyle.FixedSingle;
+
+                if (!workpbs.Exists(x => x == p))
+                {
+                    workpbs.Add(p);//объявляет его рабочим
+                    workCockroachs.Add(LC[k]);//по найденному номеру находим Таракана в списке
+                }
             }
         }
         private void IMouseMove(object sender, MouseEventArgs e)
@@ -88,17 +110,21 @@ namespace RobotCockroach
         {
             //извлекаем PictureBox
             PictureBox picture = (PictureBox)e.Data.GetData(typeof(PictureBox));
+            int k = workpbs.FindIndex(x => x == picture);
             Panel panel = sender as Panel;
-            //получаем клиентские координаты в момент отпускания кнопки
-            Point pointDrop = panel.PointToClient(new Point(e.X, e.Y));
+            
             //извлекаем клиентские координаты мыши в момент начала перетскивания
             Point pointDrag = (Point)picture.Tag;
+            //получаем клиентские координаты в момент отпускания кнопки
+            Point pointDrop = panel.PointToClient(new Point(e.X, e.Y));
+            
             //вычисляем и устанавливаем Location для PictureBox в Panel
 
-            picture.Location = pointDrop;
+            picture.Location = new Point(pointDrop.X - pointDrag.X, pointDrop.Y - pointDrag.Y);
             //устанавливаем координаты для X и Y для рабочего таракана
-            workCockroach.X = picture.Location.X;
-            workCockroach.Y = picture.Location.Y;
+            
+            workCockroachs[k].X = picture.Location.X;
+            workCockroachs[k].Y = picture.Location.Y;
             picture.Parent = panel;
 
         }
@@ -132,13 +158,17 @@ namespace RobotCockroach
             }
             else//выполнение команды из списка
             {
-                string s = (string)Algorithm.Items[AlgStep];
-                Algorithm.SetSelected(AlgStep, true);
-                if (s == "Step")
-                    workCockroach.Step(20);
-                else
-                    workCockroach.ChangeTrend(s[0]);
-                RePaint(workCockroach, workpb);
+                foreach (var (workCockroach, workpb) in workCockroachs.Zip(workpbs, Tuple.Create))
+                {
+                    string s = (string)Algorithm.Items[AlgStep];
+                    Algorithm.SetSelected(AlgStep, true);
+                    if (s == "Step")
+                        workCockroach.Step(20);
+                    else
+                        workCockroach.ChangeTrend(s[0]);
+                    RePaint(workCockroach, workpb);
+                    
+                }
                 AlgStep++;
             }
 
@@ -162,6 +192,41 @@ namespace RobotCockroach
         private void StepBtn_Click(object sender, EventArgs e)
         {
             Algorithm.Items.Add((sender as Button).Text);
+        }
+
+        private void ToolStripMenuItemFindSkin_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = Application.StartupPath;
+                openFileDialog.Filter = "Files|*.jpg;*.jpeg;*.png;";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var (cockroach, p) in workCockroachs.Zip(workpbs, Tuple.Create))
+                    {
+                        cockroach.Image = new Bitmap(openFileDialog.FileName);
+                        RePaint(cockroach, p);
+                    }
+
+                }
+            }
+        }
+
+        private void ButtonDeleteHero_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < workpbs.Count; i++)
+            {
+                int k = PB.IndexOf(workpbs[i] as PictureBox);
+                workCockroachs.RemoveAt(i);
+                workpbs[i].Dispose();
+                workpbs.RemoveAt(i);
+                LC.RemoveAt(k);
+                PB[k].Dispose();
+                PB.RemoveAt(k);
+            }
         }
     }
 }

@@ -32,7 +32,6 @@ namespace RobotCockroach
             this.components = new System.ComponentModel.Container();
             this.Field = new System.Windows.Forms.Panel();
             this.Group = new System.Windows.Forms.Panel();
-            this.Algorithm = new System.Windows.Forms.ListBox();
             this.UpBtn = new System.Windows.Forms.Button();
             this.RightBtn = new System.Windows.Forms.Button();
             this.DownBtn = new System.Windows.Forms.Button();
@@ -41,13 +40,21 @@ namespace RobotCockroach
             this.NebBtn = new System.Windows.Forms.Button();
             this.RunBtn = new System.Windows.Forms.Button();
             this.ClearBtn = new System.Windows.Forms.Button();
+            this.Algorithm = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemFindSkin = new System.Windows.Forms.ToolStripMenuItem();
+            this.ButtonDeleteHero = new System.Windows.Forms.Button();
+            this.Field.SuspendLayout();
             this.Group.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Field
             // 
             this.Field.AllowDrop = true;
+            this.Field.Controls.Add(this.menuStrip1);
             this.Field.Location = new System.Drawing.Point(0, 0);
             this.Field.Name = "Field";
             this.Field.Size = new System.Drawing.Size(498, 450);
@@ -57,6 +64,7 @@ namespace RobotCockroach
             // 
             // Group
             // 
+            this.Group.Controls.Add(this.ButtonDeleteHero);
             this.Group.Controls.Add(this.UpBtn);
             this.Group.Controls.Add(this.RightBtn);
             this.Group.Controls.Add(this.DownBtn);
@@ -69,14 +77,6 @@ namespace RobotCockroach
             this.Group.Name = "Group";
             this.Group.Size = new System.Drawing.Size(143, 450);
             this.Group.TabIndex = 1;
-            // 
-            // Algorithm
-            // 
-            this.Algorithm.FormattingEnabled = true;
-            this.Algorithm.Location = new System.Drawing.Point(653, 12);
-            this.Algorithm.Name = "Algorithm";
-            this.Algorithm.Size = new System.Drawing.Size(135, 420);
-            this.Algorithm.TabIndex = 0;
             // 
             // UpBtn
             // 
@@ -158,10 +158,54 @@ namespace RobotCockroach
             this.ClearBtn.UseVisualStyleBackColor = true;
             this.ClearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
             // 
+            // Algorithm
+            // 
+            this.Algorithm.FormattingEnabled = true;
+            this.Algorithm.Location = new System.Drawing.Point(653, 12);
+            this.Algorithm.Name = "Algorithm";
+            this.Algorithm.Size = new System.Drawing.Size(135, 420);
+            this.Algorithm.TabIndex = 0;
+            // 
             // timer1
             // 
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.настройкиToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(498, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // настройкиToolStripMenuItem
+            // 
+            this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItemFindSkin});
+            this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.настройкиToolStripMenuItem.Text = "Настройки";
+            // 
+            // ToolStripMenuItemFindSkin
+            // 
+            this.ToolStripMenuItemFindSkin.Name = "ToolStripMenuItemFindSkin";
+            this.ToolStripMenuItemFindSkin.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItemFindSkin.Text = "Выбрать скин";
+            this.ToolStripMenuItemFindSkin.Click += new System.EventHandler(this.ToolStripMenuItemFindSkin_Click);
+            // 
+            // ButtonDeleteHero
+            // 
+            this.ButtonDeleteHero.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonDeleteHero.Location = new System.Drawing.Point(36, 327);
+            this.ButtonDeleteHero.Name = "ButtonDeleteHero";
+            this.ButtonDeleteHero.Size = new System.Drawing.Size(75, 23);
+            this.ButtonDeleteHero.TabIndex = 10;
+            this.ButtonDeleteHero.Text = "Del Hero";
+            this.ButtonDeleteHero.UseVisualStyleBackColor = true;
+            this.ButtonDeleteHero.Click += new System.EventHandler(this.ButtonDeleteHero_Click);
             // 
             // MainForm
             // 
@@ -171,10 +215,15 @@ namespace RobotCockroach
             this.Controls.Add(this.Algorithm);
             this.Controls.Add(this.Group);
             this.Controls.Add(this.Field);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Робот-таракан";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Field.ResumeLayout(false);
+            this.Field.PerformLayout();
             this.Group.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -193,6 +242,10 @@ namespace RobotCockroach
         private System.Windows.Forms.Button ClearBtn;
         private System.Windows.Forms.ListBox Algorithm;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemFindSkin;
+        private System.Windows.Forms.Button ButtonDeleteHero;
     }
 }
 
