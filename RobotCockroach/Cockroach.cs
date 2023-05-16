@@ -11,7 +11,7 @@ namespace RobotCockroach
     class Cockroach
     {
         public Bitmap Image { get; set; }
-        direction trend = direction.Up;
+        public direction trend = direction.Up;
         const int step = 30;
 
         public int X { get; set; }

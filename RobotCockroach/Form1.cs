@@ -34,7 +34,7 @@ namespace RobotCockroach
 
         private void NebBtn_Click(object sender, EventArgs e)
         {
-            Cockroach cockroach = new Cockroach(new Bitmap(@"D:\Лабораторки\ООП\OOP_Lab5\RobotCockroach\cockroach1.png"));//
+            Cockroach cockroach = new Cockroach(new Bitmap(@"\\lib16\Students\ФИб-2\ООП\Ощепков Дмитрий\RobotCockroachGUI\RobotCockroach\cockroach1.png"));//
             PictureBox p = new PictureBox();
             foreach (var workpb in workpbs)
                 workpb.BorderStyle = BorderStyle.None;
@@ -214,6 +214,9 @@ namespace RobotCockroach
                     foreach (var (cockroach, p) in workCockroachs.Zip(workpbs, Tuple.Create))
                     {
                         cockroach.Image = new Bitmap(openFileDialog.FileName);
+                        char prevTrend = cockroach.trend.ToString()[0];
+                        cockroach.trend = direction.Up;
+                        cockroach.ChangeTrend(prevTrend);
                         RePaint(cockroach, p);
                     }
 
