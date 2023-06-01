@@ -10,7 +10,10 @@ using System.Windows.Forms;
 
 namespace RobotCockroach
 {
-    enum direction : byte { Up, Right, Down, Left };
+    enum Direction : byte {
+        Up, Right, Down, Left,
+      
+    };
     
     public partial class MainForm : Form
     {
@@ -169,9 +172,9 @@ namespace RobotCockroach
                     string s = (string)Algorithm.Items[AlgStep];
                     Algorithm.SetSelected(AlgStep, true);
                     if (s == "Step")
-                        workCockroach.Step(20);
+                        workCockroach.Step();
                     else
-                        workCockroach.ChangeTrend(s[0]);
+                        workCockroach.ChangeTrend(s);
                     RePaint(workCockroach, workpb);
                     
                 }
@@ -213,10 +216,7 @@ namespace RobotCockroach
                 {
                     foreach (var (cockroach, p) in workCockroachs.Zip(workpbs, Tuple.Create))
                     {
-                        cockroach.Image = new Bitmap(openFileDialog.FileName);
-                        char prevTrend = cockroach.trend.ToString()[0];
-                        cockroach.trend = direction.Up;
-                        cockroach.ChangeTrend(prevTrend);
+                        cockroach.SetSkin(new Bitmap(openFileDialog.FileName));
                         RePaint(cockroach, p);
                     }
 

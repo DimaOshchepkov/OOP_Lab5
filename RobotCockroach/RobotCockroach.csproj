@@ -55,6 +55,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="State\DirectionDown.cs" />
+    <Compile Include="State\DirectionLeft.cs" />
+    <Compile Include="State\DirectionRight.cs" />
+    <Compile Include="State\DirectionUp.cs" />
+    <Compile Include="State\IDirection.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

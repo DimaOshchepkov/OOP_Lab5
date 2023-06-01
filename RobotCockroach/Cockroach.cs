@@ -5,80 +5,56 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using RobotCockroach.State;
 
 namespace RobotCockroach
 {
     class Cockroach
     {
-        public Bitmap Image { get; set; }
-        public direction trend = direction.Up;
-        const int step = 30;
+        private Bitmap image;
+        public Bitmap Image
+        {
+            get
+            {
+                return image;
+            }
+            set
+            {
+                if (direction != null)
+                    direction.image = value;
+                image = value;
+            }
+        }
+    
 
-        public int X { get; set; }
-        public int Y { get; set; }
+        //public Direction trend = Direction.Up;
+
+        IDirection direction;
+
+        public int X;
+        public int Y;
         public Cockroach(Bitmap _Image)
         {
             Image = _Image;
+            direction = new DirectionUp(Image);
         }
 
-        public void Step(int value)
+        public void Step()
         {
-            switch (trend)
-            {
-                case direction.Right: X += value; break;
-                case direction.Down: Y += value; break;
-                case direction.Left: X -= value; break;
-                case direction.Up: Y -= value; break;
-            }
+            direction.Step(ref X, ref Y);
         }
 
-        //Изменение направления, параметр – первая буква направления
-        public void ChangeTrend(char c)
+        public void ChangeTrend(string command)
         {
-            direction newtrend = trend;
-            for (direction y = direction.Up; y <= direction.Left; y++)
-                if (char.ToLower(c) == char.ToLower(y.ToString()[0]))
-                {
-                    newtrend = y;
-                    break;
-                }
-            switch (trend)
-            {
-                case direction.Up:
-                    switch (newtrend)
-                    {
-                        case direction.Right: Image.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-                        case direction.Down: Image.RotateFlip(RotateFlipType.Rotate180FlipNone); break;
-                        case direction.Left: Image.RotateFlip(RotateFlipType.Rotate270FlipNone); break;
-                    }
-                    break;
-                case direction.Right:
-                    switch (newtrend)
-                    {
-                        case direction.Up: Image.RotateFlip(RotateFlipType.Rotate270FlipNone); break;
-                        case direction.Down: Image.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-                        case direction.Left: Image.RotateFlip(RotateFlipType.Rotate180FlipNone); break;
-                    }
-                    break;
-                case direction.Down:
-                    switch (newtrend)
-                    {
-                        case direction.Up: Image.RotateFlip(RotateFlipType.Rotate180FlipNone); break;
-                        case direction.Right: Image.RotateFlip(RotateFlipType.Rotate270FlipNone); break;
-                        case direction.Left: Image.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-                    }
-                    break;
-                case direction.Left:
-                    switch (newtrend)
-                    {
-                        case direction.Up: Image.RotateFlip(RotateFlipType.Rotate90FlipNone); break;
-                        case direction.Down: Image.RotateFlip(RotateFlipType.Rotate270FlipNone); break;
-                        case direction.Right: Image.RotateFlip(RotateFlipType.Rotate180FlipNone); break;
-                    }
-                    break;
-            }
-            trend = newtrend;
+            direction = direction.ChangeTrend(command);
         }
+
+        public void SetSkin(Bitmap image)
+        {
+            Image = image;
+            direction = new DirectionUp(Image);
+        }
+        
     }
 
 
