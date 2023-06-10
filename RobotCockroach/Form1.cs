@@ -39,8 +39,12 @@ namespace RobotCockroach
         {
             Cockroach cockroach = new Cockroach(new Bitmap(@"\\lib16\Students\ФИб-2\ООП\Ощепков Дмитрий\RobotCockroachGUI\RobotCockroach\cockroach1.png"));//
             PictureBox p = new PictureBox();
+
             foreach (var workpb in workpbs)
                 workpb.BorderStyle = BorderStyle.None;
+
+            workpbs.Clear();
+            workCockroachs.Clear();
             p.BorderStyle = BorderStyle.FixedSingle;
 
             p.MouseMove += new MouseEventHandler(IMouseMove);

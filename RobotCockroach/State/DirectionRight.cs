@@ -33,5 +33,6 @@ namespace RobotCockroach.State
                 default: return new DirectionUp(image);
             }
         }
+        public override void Step(ref int X, ref int Y) => X += step;
     }
 }
